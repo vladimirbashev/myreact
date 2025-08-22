@@ -1,0 +1,18 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+  gap: 16px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.left-panel {
+  width: 400px;
+  padding: 16px;
+}
+
+.main-panel {
+  flex: 1;
+  padding: 16px;
+  overflow: auto;
+}
