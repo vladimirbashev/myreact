@@ -1,12 +1,10 @@
 const API_URL = "https://fakestoreapi.com/products";
 
-// получить список продуктов
 export async function fetchProducts() {
   const res = await fetch(API_URL);
   return res.json();
 }
 
-// добавить продукт
 export async function addProduct(product) {
   const res = await fetch(API_URL, {
     method: "POST",
@@ -24,7 +22,6 @@ export async function addProduct(product) {
   return res.json();
 }
 
-// обновить продукт
 export async function updateProduct(product) {
   const res = await fetch(`${API_URL}/${product.id}`, {
     method: "PUT",
