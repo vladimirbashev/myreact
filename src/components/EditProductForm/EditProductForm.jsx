@@ -2,8 +2,7 @@ import { Paper, TextField, Button } from '@mui/material';
 import {useEffect, useReducer, forwardRef} from 'react';
 import {INITIAL_STATE, editFormReducer} from "./EditProductForm.state.js";
 
-const EditProductForm = forwardRef(({ product, onSave, onCancel }, ref) => {
-  // const [editingProduct, setEditingProduct] = useState({ id: null, title: '', price: '' });
+const EditProductForm = forwardRef(function EditProductForm({ product, onSave, onCancel }, ref) {
   const [editFormState, dispatchEditFormState] = useReducer(editFormReducer, INITIAL_STATE);
   const { isFormValid, isFormReadyToSubmit, product: editedProduct } = editFormState;
 
