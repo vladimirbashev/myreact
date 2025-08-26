@@ -1,30 +1,29 @@
 export const INITIAL_STATE = {
 	isFormValid: { title: true, price: true },
-	validatedProduct: undefined,
+	product: { id: null, title: '', price: '' },
 	isFormReadyToSubmit: false
 };
 
-export function editFormValidatorReducer(state, action) {
+export function editFormReducer(state, action) {
 	switch(action.type) {
+		case 'SET_PRODUCT':
+			return { ...INITIAL_STATE, product: { ...action.payload } };
 		case 'RESET_VALIDITY':
-			return { ...INITIAL_STATE };
-
+			return { ...INITIAL_STATE, product: state.product };
 		case 'VALIDATE': {
-			const product = action.payload.product;
-
-			const titleValidity = !!product.title?.trim().length;
-			const priceValidity = !isNaN(product.price) && product.price >= 0;
+			const titleValidity = !!state.product.title?.trim().length;
+			const priceValidity = !isNaN(state.product.price) && state.product.price >= 0;
 
 			const isFormReadyToSubmit = titleValidity && priceValidity;
 
 			return {
-				validatedProduct: isFormReadyToSubmit
+				product: isFormReadyToSubmit
 					? {
-						...product,
-						title: product.title?.trim(),
-						price: parseFloat(product.price)
+						...state.product,
+						title: state.product.title?.trim(),
+						price: parseFloat(state.product.price)
 					}
-					: undefined,
+					: state.product,
 				isFormValid: { title: titleValidity, price: priceValidity },
 				isFormReadyToSubmit
 			};

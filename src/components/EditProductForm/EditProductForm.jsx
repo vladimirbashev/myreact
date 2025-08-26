@@ -1,22 +1,21 @@
 import { Paper, TextField, Button } from '@mui/material';
-import {useState, useEffect, useReducer, forwardRef} from 'react';
-import {INITIAL_STATE, editFormValidatorReducer} from "./EditProductForm.state.js";
+import {useEffect, useReducer, forwardRef} from 'react';
+import {INITIAL_STATE, editFormReducer} from "./EditProductForm.state.js";
 
 const EditProductForm = forwardRef(({ product, onSave, onCancel }, ref) => {
-  const [editingProduct, setEditingProduct] = useState({ id: null, title: '', price: '' });
-  const [validatorState, dispatchFormValidator] = useReducer(editFormValidatorReducer, INITIAL_STATE);
-  const { isFormValid, isFormReadyToSubmit, validatedProduct } = validatorState;
+  // const [editingProduct, setEditingProduct] = useState({ id: null, title: '', price: '' });
+  const [editFormState, dispatchEditFormState] = useReducer(editFormReducer, INITIAL_STATE);
+  const { isFormValid, isFormReadyToSubmit, product: editedProduct } = editFormState;
 
   useEffect(() => {
-    dispatchFormValidator({ type: 'RESET_VALIDITY' });
     if (product) {
-      setEditingProduct({ ...product });
+      dispatchEditFormState({ type: 'SET_PRODUCT', payload: product });
     }
   }, [product]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditingProduct({ ...editingProduct, [name]: value });
+    dispatchEditFormState({ type: 'SET_PRODUCT', payload: { ...editedProduct, [name]: value} });
   };
 
   const handleCancel = () => {
@@ -26,8 +25,7 @@ const EditProductForm = forwardRef(({ product, onSave, onCancel }, ref) => {
   useEffect(() => {
     const submit = async () => {
       if (isFormReadyToSubmit) {
-        await onSave(validatedProduct)
-        // dispatchFormValidator({ type: 'RESET_VALIDITY' });
+        await onSave(editedProduct)
       }
     }
 
@@ -35,7 +33,7 @@ const EditProductForm = forwardRef(({ product, onSave, onCancel }, ref) => {
   }, [isFormReadyToSubmit]);
 
   const handleSave = () => {
-    dispatchFormValidator({ type: 'VALIDATE', payload: {product: editingProduct} })
+    dispatchEditFormState({ type: 'VALIDATE' })
   };
 
   if (!product) return (
@@ -51,7 +49,7 @@ const EditProductForm = forwardRef(({ product, onSave, onCancel }, ref) => {
         label="Title"
         name="title"
         inputRef={ref}
-        value={editingProduct.title}
+        value={editedProduct.title}
         onChange={handleChange}
         fullWidth
         margin="normal"
@@ -61,7 +59,7 @@ const EditProductForm = forwardRef(({ product, onSave, onCancel }, ref) => {
         label="Price"
         name="price"
         type="number"
-        value={editingProduct.price}
+        value={editedProduct.price}
         onChange={handleChange}
         fullWidth
         margin="normal"
