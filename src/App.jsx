@@ -18,7 +18,9 @@ function App() {
 
   const handleEditClick = (product) => {
     setSelectedProduct(product);
-    editProductFormRef.current.focus();
+    if (editProductFormRef.current) {
+      editProductFormRef.current.focus();
+    }
   };
 
   const handleSave = async (product) => {

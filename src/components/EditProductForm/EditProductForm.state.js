@@ -20,7 +20,7 @@ export function editFormValidatorReducer(state, action) {
 			return {
 				validatedProduct: isFormReadyToSubmit
 					? {
-						// ...product,
+						...product,
 						title: product.title?.trim(),
 						price: parseFloat(product.price)
 					}
