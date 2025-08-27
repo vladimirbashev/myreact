@@ -1,10 +1,12 @@
 import {useEffect, useRef, useState} from 'react'
 import './App.css'
 import ProductsGrid from "./components/ProductsGrid/ProductsGrid.jsx";
-import {Box, Button, Grid, Typography} from "@mui/material";
+import {Button, Grid, Typography} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import EditProductForm from "./components/EditProductForm/EditProductForm.jsx";
 import {addProduct, fetchProducts, updateProduct} from "./api/products/products.js";
+import {CurrencyContextProvider} from "./context/currency.context.jsx"
+import CurrencySelector from "./components/CurrencySelector/CurrencySelector.jsx";
 
 
 function App() {
@@ -57,29 +59,34 @@ function App() {
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid size={5}>
-        <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
-          <Typography variant="h5" gutterBottom>Products list</Typography>
-          <Button variant="contained" onClick={handleAddNew} sx={{ mb: 2 }}>
-            Add product
-          </Button>
-          <ProductsGrid products={products} onEdit={handleEditClick} />
-        </Paper>
-      </Grid>
+    <CurrencyContextProvider>
+      <Grid container spacing={2}>
+        <Grid size={12}>
+          <CurrencySelector/>
+        </Grid>
+        <Grid size={5}>
+          <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
+            <Typography variant="h5" gutterBottom>Products list</Typography>
+            <Button variant="contained" onClick={handleAddNew} sx={{ mb: 2 }}>
+              Add product
+            </Button>
+            <ProductsGrid products={products} onEdit={handleEditClick} />
+          </Paper>
+        </Grid>
 
-      <Grid size={7}>
-        <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
-          <Typography variant="h6" gutterBottom>Form</Typography>
-          <EditProductForm
-            ref={editProductFormRef}
-            product={selectedProduct}
-            onSave={handleSave}
-            onCancel={handleCancelEditing}
-          />
-        </Paper>
+        <Grid size={7}>
+          <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
+            <Typography variant="h6" gutterBottom>Edit Form</Typography>
+            <EditProductForm
+              ref={editProductFormRef}
+              product={selectedProduct}
+              onSave={handleSave}
+              onCancel={handleCancelEditing}
+            />
+          </Paper>
+        </Grid>
       </Grid>
-    </Grid>
+    </CurrencyContextProvider>
 )
 }
 

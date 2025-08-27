@@ -1,8 +1,10 @@
 import {Paper, TextField, Button, Stack, Typography} from '@mui/material';
-import {useEffect, useReducer, forwardRef} from 'react';
+import {useEffect, useReducer, forwardRef, useContext} from 'react';
 import {INITIAL_STATE, editFormReducer} from "./EditProductForm.state.js";
+import {CurrencyContext} from "../../context/currency.context.jsx";
 
 const EditProductForm = forwardRef(function EditProductForm({ product, onSave, onCancel }, ref) {
+  const { currency } = useContext(CurrencyContext);
   const [editFormState, dispatchEditFormState] = useReducer(editFormReducer, INITIAL_STATE);
   const { isFormValid, isFormReadyToSubmit, product: editedProduct } = editFormState;
 
@@ -43,10 +45,6 @@ const EditProductForm = forwardRef(function EditProductForm({ product, onSave, o
 
   return (
     <Paper sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom>
-        Edit product
-      </Typography>
-
       <Stack spacing={2}>
         <TextField
           label="Title"
@@ -54,18 +52,21 @@ const EditProductForm = forwardRef(function EditProductForm({ product, onSave, o
           inputRef={ref}
           value={editedProduct.title}
           onChange={handleChange}
-          sx={{ width: 300 }}
+          sx={{ width: 500 }}
           error={!isFormValid.title}
         />
-        <TextField
-          label="Price"
-          name="price"
-          type="number"
-          value={editedProduct.price}
-          onChange={handleChange}
-          sx={{ width: 300 }}
-          error={!isFormValid.price}
-        />
+        <Stack direction="row" spacing={1} alignItems="center">
+          <TextField
+            label="Price"
+            name="price"
+            type="number"
+            value={editedProduct.price}
+            onChange={handleChange}
+            sx={{ width: 150 }}
+            error={!isFormValid.price}
+          />
+          <Typography>{currency}</Typography>
+        </Stack>
 
         <Stack direction="row" spacing={2}>
           <Button variant="contained" color="primary" onClick={handleSave}>
