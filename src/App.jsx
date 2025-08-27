@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react'
 import './App.css'
 import ProductsGrid from "./components/ProductsGrid/ProductsGrid.jsx";
-import {Box, Button} from "@mui/material";
+import {Box, Button, Grid, Typography} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import EditProductForm from "./components/EditProductForm/EditProductForm.jsx";
 import {addProduct, fetchProducts, updateProduct} from "./api/products/products.js";
@@ -57,25 +57,29 @@ function App() {
   };
 
   return (
-      <Box className="app-container">
-          <Paper className="left-panel" elevation={3}>
-            <h1>Users list</h1>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddNew}
-              style={{ marginBottom: 16 }}
-            >
-              Add user
-            </Button>
-            <ProductsGrid products={products} onEdit={handleEditClick}/>
-          </Paper>
+    <Grid container spacing={2}>
+      <Grid size={5}>
+        <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
+          <Typography variant="h5" gutterBottom>Products list</Typography>
+          <Button variant="contained" onClick={handleAddNew} sx={{ mb: 2 }}>
+            Add product
+          </Button>
+          <ProductsGrid products={products} onEdit={handleEditClick} />
+        </Paper>
+      </Grid>
 
-          <Box className="main-panel">
-              <h1>Form</h1>
-              <EditProductForm ref={editProductFormRef} product={selectedProduct} onSave={handleSave} onCancel={handleCancelEditing}/>
-          </Box>
-      </Box>
+      <Grid size={7}>
+        <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
+          <Typography variant="h6" gutterBottom>Form</Typography>
+          <EditProductForm
+            ref={editProductFormRef}
+            product={selectedProduct}
+            onSave={handleSave}
+            onCancel={handleCancelEditing}
+          />
+        </Paper>
+      </Grid>
+    </Grid>
 )
 }
 
