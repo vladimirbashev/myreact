@@ -5,6 +5,11 @@ export async function fetchProducts() {
   return res.json();
 }
 
+export async function fetchProductById(id) {
+  const res = await fetch(`${API_URL}/${id}`);
+  return res.json();
+}
+
 export async function addProduct(product) {
   const res = await fetch(API_URL, {
     method: "POST",

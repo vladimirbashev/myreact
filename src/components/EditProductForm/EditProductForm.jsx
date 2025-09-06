@@ -1,32 +1,59 @@
 import {Paper, TextField, Button, Stack, Typography} from '@mui/material';
-import {useEffect, useReducer, forwardRef, useContext} from 'react';
+import {useEffect, useReducer, useContext} from 'react';
 import {INITIAL_STATE, editFormReducer} from "./EditProductForm.state.js";
 import {CurrencyContext} from "../../context/currency.context.jsx";
+import {addProduct, fetchProductById, updateProduct} from "../../api/products/products.js";
+import {useNavigate, useParams} from "react-router-dom";
 
-const EditProductForm = forwardRef(function EditProductForm({ product, onSave, onCancel }, ref) {
+function EditProductForm() {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const { currency } = useContext(CurrencyContext);
   const [editFormState, dispatchEditFormState] = useReducer(editFormReducer, INITIAL_STATE);
-  const { isFormValid, isFormReadyToSubmit, product: editedProduct } = editFormState;
+  const { isFormValid, isFormReadyToSubmit, product } = editFormState;
 
   useEffect(() => {
-    if (product) {
-      dispatchEditFormState({ type: 'SET_PRODUCT', payload: product });
+    if (id) {
+      fetchProductById(id).then((product) => {
+        dispatchEditFormState({ type: 'SET_PRODUCT', payload: product });
+      });
+    } else {
+      dispatchEditFormState({ type: 'SET_PRODUCT', payload: { id: null, title: '', price: '' } });
     }
-  }, [product]);
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    dispatchEditFormState({ type: 'SET_PRODUCT', payload: { ...editedProduct, [name]: value} });
+    dispatchEditFormState({ type: 'SET_PRODUCT', payload: { ...product, [name]: value} });
   };
 
   const handleCancel = () => {
-    onCancel();
+    navigate('/');
   }
+
+  const update = async (product) => {
+    let error = false;
+    if (product.id === null) {
+      const added = await addProduct(product);
+      error = added.status === 'error';
+      if (!error) {
+        navigate('/');
+      }
+    } else {
+      const updated = await updateProduct(product);
+      error = updated.status === 'error';
+      if (!error) {
+        navigate('/');
+      }
+    }
+
+    return error;
+  };
 
   useEffect(() => {
     const submit = async () => {
       if (isFormReadyToSubmit) {
-        await onSave(editedProduct)
+        await update(product)
       }
     }
 
@@ -37,11 +64,9 @@ const EditProductForm = forwardRef(function EditProductForm({ product, onSave, o
     dispatchEditFormState({ type: 'VALIDATE' })
   };
 
-  if (!product) return (
-    <Paper style={{ padding: 16 }}>
-      <p>Select product for edit</p>
-    </Paper>
-  );
+  if (product === null) {
+    return <p>Loading...</p>
+  }
 
   return (
     <Paper sx={{ p: 2 }}>
@@ -49,8 +74,7 @@ const EditProductForm = forwardRef(function EditProductForm({ product, onSave, o
         <TextField
           label="Title"
           name="title"
-          inputRef={ref}
-          value={editedProduct.title}
+          value={product.title}
           onChange={handleChange}
           sx={{ width: 500 }}
           error={!isFormValid.title}
@@ -60,7 +84,7 @@ const EditProductForm = forwardRef(function EditProductForm({ product, onSave, o
             label="Price"
             name="price"
             type="number"
-            value={editedProduct.price}
+            value={product.price}
             onChange={handleChange}
             sx={{ width: 150 }}
             error={!isFormValid.price}
@@ -79,6 +103,6 @@ const EditProductForm = forwardRef(function EditProductForm({ product, onSave, o
       </Stack>
     </Paper>
   );
-});
+};
 
 export default EditProductForm;

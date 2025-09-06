@@ -7,9 +7,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Button} from "@mui/material";
+import {useEffect, useState} from "react";
+import {fetchProducts} from "../../api/products/products.js";
+import {useNavigate} from "react-router-dom";
 
 
-function ProductsGrid({products, onEdit }) {
+function ProductsGrid() {
+    const navigate = useNavigate();
+    const [products, setProducts] = useState(null)
+
+    useEffect(() => {
+        fetchProducts().then((data) => setProducts(data));
+    }, []);
+
 
     if (products === null) {
         return <p>Loading...</p>
@@ -32,7 +42,7 @@ function ProductsGrid({products, onEdit }) {
                             <TableCell>{product.title}</TableCell>
                             <TableCell>{product.price}</TableCell>
                             <TableCell>
-                                <Button variant="outlined" onClick={() => onEdit(product)}>Edit</Button>
+                                <Button variant="outlined" onClick={() => navigate(`/product/${product.id}`)}>Edit</Button>
                             </TableCell>
                         </TableRow>
                     ))}
