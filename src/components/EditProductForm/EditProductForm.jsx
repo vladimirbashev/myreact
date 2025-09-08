@@ -2,25 +2,22 @@ import {Paper, TextField, Button, Stack, Typography} from '@mui/material';
 import {useEffect, useReducer, useContext} from 'react';
 import {INITIAL_STATE, editFormReducer} from "./EditProductForm.state.js";
 import {CurrencyContext} from "../../context/currency.context.jsx";
-import {addProduct, fetchProductById, updateProduct} from "../../api/products/products.js";
-import {useNavigate, useParams} from "react-router-dom";
+import {addProduct, updateProduct} from "../../api/products/products.js";
+import {useLoaderData, useNavigate} from "react-router-dom";
 
 function EditProductForm() {
   const navigate = useNavigate();
-  const { id } = useParams();
   const { currency } = useContext(CurrencyContext);
   const [editFormState, dispatchEditFormState] = useReducer(editFormReducer, INITIAL_STATE);
   const { isFormValid, isFormReadyToSubmit, product } = editFormState;
 
+  const loaderData = useLoaderData();
+
   useEffect(() => {
-    if (id) {
-      fetchProductById(id).then((product) => {
-        dispatchEditFormState({ type: 'SET_PRODUCT', payload: product });
-      });
-    } else {
-      dispatchEditFormState({ type: 'SET_PRODUCT', payload: { id: null, title: '', price: '' } });
+    if (product) {
+      dispatchEditFormState({ type: 'SET_PRODUCT', payload: loaderData });
     }
-  }, [id]);
+  }, [loaderData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

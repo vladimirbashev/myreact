@@ -15,13 +15,31 @@ import {useNavigate} from "react-router-dom";
 function ProductsGrid() {
     const navigate = useNavigate();
     const [products, setProducts] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState('')
 
     useEffect(() => {
-        fetchProducts().then((data) => setProducts(data));
+        const f = async () => {
+            try {
+                setIsLoading(true);
+                const data = await fetchProducts();
+                setProducts(data);
+            } catch (error) {
+                console.error('Error during loading data:', error);
+                setError('Cannot load data.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        f();
     }, []);
 
+    if (error) {
+        return <p>{error}</p>
+    }
 
-    if (products === null) {
+    if (isLoading) {
         return <p>Loading...</p>
     }
 
