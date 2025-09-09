@@ -8,6 +8,7 @@ import ProductsGrid from "./components/ProductsGrid/ProductsGrid.jsx";
 import EditProductForm from "./components/EditProductForm/EditProductForm.jsx";
 import Layout from "./components/Layout/Layout.jsx";
 import {fetchProductById} from "./api/products/products.js";
+import { Error as ErropPage } from './pages/Error/Error.jsx';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
+        errorElement: <ErropPage />,
         element: <>
           <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
             <Typography variant="h5" gutterBottom>Products list</Typography>
@@ -30,6 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/product/:id?',
+        errorElement: <ErropPage />,
         element: <>
           <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
             <Typography variant="h6" gutterBottom>Edit Form</Typography>
@@ -42,6 +45,10 @@ const router = createBrowserRouter([
           }
           return await fetchProductById(params.id);
         }
+      },
+      {
+        path: '*',
+        element: <ErropPage />
       }
     ]
   }
