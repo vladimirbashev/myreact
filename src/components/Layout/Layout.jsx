@@ -1,4 +1,4 @@
-import {CurrencyContextProvider} from "../../context/currency.context.jsx";
+import CurrencyContextProvider from '../../contexts/currency/currency.contextProvider.jsx';
 import CurrencySelector from "../CurrencySelector/CurrencySelector.jsx";
 import {Outlet} from "react-router-dom";
 

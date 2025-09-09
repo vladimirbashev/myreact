@@ -1,7 +1,7 @@
 import {Paper, TextField, Button, Stack, Typography} from '@mui/material';
 import {useEffect, useReducer, useContext} from 'react';
 import {INITIAL_STATE, editFormReducer} from "./EditProductForm.state.js";
-import {CurrencyContext} from "../../context/currency.context.jsx";
+import CurrencyContext from "../../contexts/currency/currency.context.jsx";
 import {addProduct, updateProduct} from "../../api/products/products.js";
 import {useLoaderData, useNavigate} from "react-router-dom";
 

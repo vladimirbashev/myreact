@@ -3,7 +3,7 @@ import ProductsGrid from "./components/ProductsGrid/ProductsGrid.jsx";
 import {Button, Link, Typography} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import EditProductForm from "./components/EditProductForm/EditProductForm.jsx";
-import {CurrencyContextProvider} from "./context/currency.context.jsx"
+import CurrencyContextProvider from "./contexts/currency/currency.contextProvider.jsx"
 import CurrencySelector from "./components/CurrencySelector/CurrencySelector.jsx";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 

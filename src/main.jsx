@@ -23,7 +23,6 @@ const router = createBrowserRouter([
       {
         path: '/product/:id?',
         errorElement: <ErropPage />,
-        // element: <Product></Product>,
         element: <Suspense fallback={<>Loading...</>}><Product /></Suspense>,
         loader: async ({ params }) => {
           if (!params.id) {

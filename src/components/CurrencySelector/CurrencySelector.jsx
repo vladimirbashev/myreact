@@ -1,6 +1,6 @@
 import {useContext } from "react";
 import ToggleSelector from "../ToggleSelector/Toggle.jsx";
-import {CurrencyContext} from "../../context/currency.context.jsx";
+import CurrencyContext from "../../contexts/currency/currency.context.jsx";
 
 
 export default function CurrencySelector() {
