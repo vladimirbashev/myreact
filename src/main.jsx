@@ -5,9 +5,10 @@ import {createBrowserRouter, Link, RouterProvider} from "react-router-dom";
 import Layout from "./components/Layout/Layout.jsx";
 import {fetchProductById} from "./api/products/products.js";
 import { Error as ErropPage } from './pages/Error/Error.jsx';
-import Products from "./pages/ProductsPage/Products.jsx";
 
 const Product = lazy(() => import('./pages/ProductPage/Product'));
+const Products = lazy(() => import('./pages/ProductsPage/Products'));
+
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
       {
         path: '/',
         errorElement: <ErropPage />,
-        element: <Products></Products>
+        element: <Suspense fallback={<>Loading...</>}><Products /></Suspense>,
       },
       {
         path: '/product/:id?',
